@@ -56,3 +56,21 @@ To address this (and empowered as a lead), I drove enhancements:
 * I drove changes in future hardware that allowed better robustness of debugging than a software driver.
 
 The above has already paid dividends as my team has been able to identify rootcauses quicker, not block their programs.
+
+## Invent and Simplify
+Servers often include an EEPROM that essentially holds a manifest for each server (such as serial number, server model, etc.).
+This EEPROM is typically authored by various hardware partners involved in the server's manufacturing. 
+
+While supporting operations for my team, I observed that the organization was negatively impacted by the poor quality of data within this EEPROM. 
+Issues included parsing errors caused by the lack of a formal specification, which led to server ingestion challenges for Data Center Operations (DCO). 
+It also forced teams that rely on this data to take a reactive approach to addressing errors.
+
+To address these issues, I proactively took the lead in developing detailed specifications for the EEPROM content.
+Additionally, I created qualification tests to be run in the factory to enforce these specifications and prevent data quality issues from arising.
+
+This initiative also allowed me to proactively address concerns from Supply Chain teams regarding the diversity of components in the Bill of Materials (BOM). 
+I included mandates in the specifications for hardware partners to document relevant aspects of the BOM within the EEPROM.
+
+This improvement proved highly valuable during operations, as it enabled teams to identify populated components on a server during component failures without needing to guess. 
+It also allowed us to derive metrics on component diversity, which helped reduce supplier risk. 
+Ultimately, this effort completely eliminated server ingestion errors for DCO.
