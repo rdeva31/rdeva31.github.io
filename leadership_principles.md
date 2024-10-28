@@ -22,3 +22,37 @@ The results of my effort were the following:
 * The project was delivered largely almost in-time (mostly delayed due to late feature-adds).
 * The risks I took paid off as we didn't have to respin the hardware, keeping the larger program on track.
 * Engineers that worked with me were given a sandbox to succeed in, and one of them were promoted after the project.
+
+
+## Dive Deep
+At AWS, I was the tech lead of a controller called a Baseboard Management Controller (BMC), which is an always-on controller present in most Servers/computing devices. 
+I owned a new SoC that I had brought up and was the first in productizing it.
+One of the unique aspects of a BMC is that it needs almost 100% uptime, as it's primary function is powering on a server.
+Unfortunately as part of program, we discovered that in many cases the new SoC wouldn't power on (~5% repro rate), which has massive cascading affects of making the server entirely unavailable
+
+The impact of this was generally two fold:
+1. In production, it made the server unsellable to customers (i.e. effective bricks in a datacenter)
+2. In manufacturing, it caused turmoil as it required humans to manually power cycle the server.
+   Besides the cost of manual labor, this reduced build yields.
+
+This was difficult to solve because there were no interfaces to debug the BMC, aside for network interfaces which were down in these instances.
+I made progress by doing the following:
+* I enlisted our hardware partners in starting testing at scale on servers with debug probes (UART headers etc.)
+* I simulated failures of various hardware components in Qemu to see how our firmware behaved
+
+Through my experiments, I found a few things:
+1. We did a lot of hardware initialisation prior to bring up our network interfaces
+2. We weren't starting our watchdog early enough
+
+As a fix I patched up our bootloader to kick the watchdog.
+After I deferred the bulk of hardware initialisation after network setup, I was able to change the nature of the bug where my SoC was not fully functional but had network connectivity.
+This let me debug more effectively and find a poorly written software that went into a infinite loop when hardware didn't behave perfectly.
+
+While I was able to fix this bug, the bug had impacted our customer and the effort of iteratively debugging had slowed down the product schedule.
+
+To address this (and empowered as a lead), I drove enhancements:
+* I implemented a serial driver in Linux that tunneled logs into another always-on-controller on the board via a side-band interface.
+  This improved the operational posture of our firmware in production where debug probes are not available.
+* I drove changes in future hardware that allowed better robustness of debugging than a software driver.
+
+The above has already paid dividends as my team has been able to identify rootcauses quicker, not block their programs.
