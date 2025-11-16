@@ -74,3 +74,13 @@ I included mandates in the specifications for hardware partners to document rele
 This improvement proved highly valuable during operations, as it enabled teams to identify populated components on a server during component failures without needing to guess. 
 It also allowed us to derive metrics on component diversity, which helped reduce supplier risk. 
 Ultimately, this effort completely eliminated server ingestion errors for DCO.
+
+## Have Backbone; Disagree and Commit
+
+When I worked at AWS, we work in a larger org that shipped 2 version of Linux kernels.  My team maintained one and a sister team maintained another.  As part of our security posture, we regularly refreshed out Kernels and shipped it to the the existing fleet.  This was generally a resource intensive effort for both teams. 
+
+Our management insisted on reducing the resources dedicated to this effort, and develop a common Kernel model.  I argued that this with data:
+0. Management was mistaken that the kernel was just the kernel.  Our team wrote most of our features as Linux drivers as well as contributed to a lot of core Kernel drivers.  The sibling team didn't have much in that sense, but rather suffered from poor testing.
+0. Management assumed that rebasing the kernel accounted for most of our time.  They were mistaken in that we spent most of our time testing than rebases.
+
+However in the interest of improving the process, I offered an plan to optimise resources and result in a better quality product.
